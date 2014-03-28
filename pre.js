@@ -1,14 +1,14 @@
 var Module = {
   'print': function (text) {
-    if (ENVIRONMENT_IS_WORKER) 
+    if (typeof importScripts === 'function') // is worker
       postMessage(text); 
     else
       console.log(text);
   },
   'printError': function (text) { 
-    if (ENVIRONMENT_IS_WORKER) 
+    if (typeof importScripts === 'function') // is worker
       postMessage(text); 
     else
       console.log(text);
   }
-}
+};
