@@ -5,7 +5,7 @@ JavaScript (emscripten) port of lmfit library:
 
 "a self-contained C library for Levenberg-Marquardt least-squares minimization and curve fitting" (quote http://apps.jcns.fz-juelich.de/doku/sc/lmfit)
 
-Currently only curve fitting is implemented. Some examples: https://m0ose.github.io/lmfit.js/test2.html
+Currently only curve fitting is implemented. Some examples: http://jvail.github.io/dairy.js/,  https://m0ose.github.io/lmfit.js/test2.html
 
 ## missing features
 
