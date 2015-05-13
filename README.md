@@ -14,5 +14,4 @@ Currently only curve fitting is implemented. Some examples: http://jvail.github.
 
 ## Acknowledgements
 
-We gratefully acknowledge funding from the European Community´s 7th Framework Programme (FP7/2007-2013) under the grant 
-agreement number FP7-266367 (Sustainable organic and low input dairying).
+The research leading to these results has received funding from the European Community’s Seventh Framework Programme (FP7/2007–2013) under grant agreement No. FP7-266367 (SOLID).
