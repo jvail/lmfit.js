@@ -1,3 +1,5 @@
+var lmfit = (function () {
+
 var Module = {
   'print': function (text) {
     if (typeof importScripts === 'function') // is worker

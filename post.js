@@ -71,3 +71,13 @@ Module['fit'] = function (data) { // TODO: Accept strings
 
   return ret;
 };
+
+this['lmfit'] = {
+  'fit': Module['fit']
+};
+
+return this['lmfit'];
+
+})();
+if (typeof module !== 'undefined') module.exports = lmfit;
+if (typeof define === 'function') define(lmfit);
