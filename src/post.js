@@ -28,6 +28,9 @@ Module['fit'] = function (data) { // TODO: Accept strings
     }
   );
 
+  /* print info while fitting */
+  var verbose = data.verbose;
+
   /* no. of params */
   var n = data.n;
 
@@ -42,7 +45,7 @@ Module['fit'] = function (data) { // TODO: Accept strings
 
   /* y-axis values */
   var y = data.y;
-  
+
   /* malloc enough space for the data */
   var par_ptr = _malloc(par.length * par.BYTES_PER_ELEMENT);
   var t_ptr = _malloc(t.length * t.BYTES_PER_ELEMENT);
@@ -52,17 +55,17 @@ Module['fit'] = function (data) { // TODO: Accept strings
   var par_dataHeap = new Uint8Array(Module.HEAPU8.buffer, par_ptr, par.length * par.BYTES_PER_ELEMENT);
   var t_dataHeap = new Uint8Array(Module.HEAPU8.buffer, t_ptr, t.length * t.BYTES_PER_ELEMENT);
   var y_dataHeap = new Uint8Array(Module.HEAPU8.buffer, y_ptr, y.length * y.BYTES_PER_ELEMENT);
-  
+
   par_dataHeap.set(new Uint8Array(par.buffer));
   t_dataHeap.set(new Uint8Array(t.buffer));
   y_dataHeap.set(new Uint8Array(y.buffer));
 
-  ret.ret = do_fit(n, par_ptr, m, t_ptr, y_ptr, f);
+  ret.ret = do_fit(n, par_ptr, m, t_ptr, y_ptr, f, +verbose);
 
   ret.params = [];
   for (var i = 0; i < par.length; i++)
     ret.params[i] = getValue(par_ptr+i*8, 'double');
-  
+
   Runtime.removeFunction(f);
   /* free the heap buffer */
   _free(par_ptr);

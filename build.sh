@@ -1,2 +1,2 @@
-#build lmfit.js and lmfit.min.js
-EMCC_DEBUG=1 emcc --memory-init-file 0 -O3 -Ilmfit-5.1 lmfit.js.c lmfit-5.1/lmcurve.c lmfit-5.1/lmmin.c -o lmfit.js --pre-js pre.js --post-js post.js -s EXPORTED_FUNCTIONS="['_do_fit']" -s RESERVED_FUNCTION_POINTERS=20
+#build lmfit.js
+EMCC_DEBUG=1 emcc --memory-init-file 0 -O3 -Isrc/lmfit-6.4 src/lmfit.js.c src/lmfit-6.4/lmcurve.c src/lmfit-6.4/lmmin.c -o lmfit.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS="['_do_fit']" -s RESERVED_FUNCTION_POINTERS=20

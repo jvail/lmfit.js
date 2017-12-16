@@ -8,20 +8,20 @@
  * Copyright: Joachim Wuttke, Forschungszentrum Juelich GmbH (2004-2013)
  *
  * License:   see ../COPYING (FreeBSD)
- * 
+ *
  * Homepage:  apps.jcns.fz-juelich.de/lmfit
  */
- 
+
 #ifndef LMSTRUCT_H
 #define LMSTRUCT_H
 #undef __BEGIN_DECLS
 #undef __END_DECLS
 #ifdef __cplusplus
-# define __BEGIN_DECLS extern "C" {
-# define __END_DECLS }
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
 #else
-# define __BEGIN_DECLS /* empty */
-# define __END_DECLS /* empty */
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS   /* empty */
 #endif
 __BEGIN_DECLS
 
@@ -61,11 +61,11 @@ typedef struct {
 
 /* Collection of output parameters for status info. */
 typedef struct {
-    double fnorm;     /* norm of the residue vector fvec. */
-    int nfev;         /* actual number of iterations. */
-    int outcome;      /* Status indicator. Nonnegative values are used as index
-                         for the message text lm_infmsg, set in lmmin.c. */
-    int userbreak;    /* Set when function evaluation requests termination. */
+    double fnorm;  /* norm of the residue vector fvec. */
+    int nfev;      /* actual number of iterations. */
+    int outcome;   /* Status indicator. Nonnegative values are used as index
+                      for the message text lm_infmsg, set in lmmin.c. */
+    int userbreak; /* Set when function evaluation requests termination. */
 } lm_status_struct;
 
 /* Preset (and recommended) control parameter settings. */
@@ -74,8 +74,8 @@ extern const lm_control_struct lm_control_float;
 
 /* Preset message texts. */
 
-extern const char *lm_infmsg[];
-extern const char *lm_shortmsg[];
+extern const char* lm_infmsg[];
+extern const char* lm_shortmsg[];
 
 __END_DECLS
 #endif /* LMSTRUCT_H */
