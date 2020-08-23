@@ -1,0 +1,3 @@
+[submodule "src/lmfit"]
+	path = src/lmfit
+	url = https://jugit.fz-juelich.de/mlz/lmfit.git

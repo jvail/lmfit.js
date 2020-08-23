@@ -1,17 +1,19 @@
-lmfit.js
-========
+# lmfit.js
 
 JavaScript (emscripten) port of lmfit library:
 
-"a self-contained C library for Levenberg-Marquardt least-squares minimization and curve fitting" (quote http://apps.jcns.fz-juelich.de/doku/sc/lmfit)
+"a self-contained C library for Levenberg-Marquardt least-squares minimization and curve fitting" (https://jugit.fz-juelich.de/mlz/lmfit)
 
 Currently only curve fitting is implemented. Some examples: http://jvail.github.io/dairy.js/,  https://m0ose.github.io/lmfit.js/test2.html
+
+
+## build
+    mkdir build && cd build
+    emcmake cmake .. -DCMAKE_CROSSCOMPILING_EMULATOR=node
+    emmake make
+    ctest
 
 ## missing features
 
 - surface fitting as example for minimization with lmmin()
 - nonlinear equations solving with lmmin()
-
-## Acknowledgements
-
-The research leading to these results has received funding from the European Community’s Seventh Framework Programme (FP7/2007–2013) under grant agreement No. FP7-266367 (SOLID).

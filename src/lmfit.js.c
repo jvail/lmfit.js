@@ -1,7 +1,6 @@
 #include "lmcurve.h"
 #include <stdio.h>
 #include <math.h>
-#include <emscripten.h>
 
 #ifdef __cplusplus
 extern "C" {
