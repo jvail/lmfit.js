@@ -8,8 +8,12 @@
   },
   "scripts": {
     "test": "node test",
+    "patch1:lmfit": "sed -i 's/add_test(${app} ${CMAKE_CURRENT_BINARY_DIR}\\/${app})/add_test(${app} ${CMAKE_CROSSCOMPILING_EMULATOR} ${CMAKE_CURRENT_BINARY_DIR}\\/${app})/g' src/lmfit/test/CMakeLists.txt",
+    "patch2:lmfit": "sed -i 's/add_test(curve1   ${CMAKE_CURRENT_BINARY_DIR}\\/..\\/demo\\/curve1)/add_test(curve1 ${CMAKE_CROSSCOMPILING_EMULATOR} ${CMAKE_CURRENT_BINARY_DIR}\\/..\\/demo\\/curve1)/g' src/lmfit/test/CMakeLists.txt",
+    "patch3:lmfit": "sed -i 's/add_test(surface1 ${CMAKE_CURRENT_BINARY_DIR}\\/..\\/demo\\/surface1)/add_test(surface1 ${CMAKE_CROSSCOMPILING_EMULATOR} ${CMAKE_CURRENT_BINARY_DIR}\\/..\\/demo\\/surface1)/g' src/lmfit/test/CMakeLists.txt",
+    "patch:lmfit": "npm run patch1:lmfit && npm run patch2:lmfit && npm run patch3:lmfit",
     "build": "emcc --memory-init-file 0 -Isrc/lmfit/lib -Os src/lmfit/build/lib/liblmfit.a src/lmfit.js.c -o lmfit.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS=[_do_fit] -s RESERVED_FUNCTION_POINTERS=20",
-    "build:lmfit": "cd src/lmfit && mkdir -p build && cd build && emcmake cmake -DCMAKE_CROSSCOMPILING_EMULATOR='node' .. && emmake make -j4 && ctest"
+    "build:lmfit": "npm run patch:lmfit && cd src/lmfit && mkdir -p build && cd build && emcmake cmake -DSHARED_LIBS=OFF -DCMAKE_CROSSCOMPILING_EMULATOR='node' .. && emmake make -j4 && ctest"
   },
   "repository": {
     "type": "git",
