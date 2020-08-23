@@ -1,0 +1,28 @@
+{
+  "name": "lmfit.js",
+  "version": "1.0.0",
+  "description": "Library for Levenberg-Marquardt least-squares minimization and curve fitting",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test",
+    "build": "emcc --memory-init-file 0 -Isrc/lmfit/lib -Os src/lmfit/build/lib/liblmfit.a src/lmfit.js.c -o lmfit.js --pre-js src/pre.js --post-js src/post.js -s EXPORTED_FUNCTIONS=[_do_fit] -s RESERVED_FUNCTION_POINTERS=20",
+    "build:lmfit": "cd src/lmfit && mkdir -p build && cd build && emcmake cmake -DCMAKE_CROSSCOMPILING_EMULATOR='node' .. && emmake make -j4 && ctest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvail/lmfit.js.git"
+  },
+  "keywords": [
+    "least-squares minimization",
+    "curve fitting"
+  ],
+  "author": "jvail",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/jvail/lmfit.js/issues"
+  },
+  "homepage": "https://github.com/jvail/lmfit.js#readme"
+}
