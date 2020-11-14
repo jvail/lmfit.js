@@ -1,11 +1,12 @@
 {
   "name": "lmfit.js",
   "version": "1.0.0",
-  "description": "Library for Levenberg-Marquardt least-squares minimization and curve fitting",
+  "description": "Curve fitting library",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
+  "type": "module",
   "scripts": {
     "test": "make lmfit-test",
     "build": "make all"
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/jvail/lmfit.js/issues"
   },
-  "homepage": "https://github.com/jvail/lmfit.js#readme"
+  "homepage": "https://github.com/jvail/lmfit.js#readme",
+  "devDependencies": {
+    "node": "^14.8.0"
+  }
 }
