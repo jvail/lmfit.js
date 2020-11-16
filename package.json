@@ -7,9 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "all": "npm run build && npm run test",
-    "test": "make lmfit-test",
-    "build": "make clean && make all"
+    "all": "make clean && npm run cc && npm run cc-test && npm run js",
+    "cc": "make lmfit",
+    "js": "make lmfit.js",
+    "cc-test": "make lmfit-test"
   },
   "repository": {
     "type": "git",
