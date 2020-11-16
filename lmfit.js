@@ -132,7 +132,6 @@ var wasmMemory;
 
 var wasmTable = new WebAssembly.Table({
  "initial": 8,
- "maximum": 8 + 4,
  "element": "anyfunc"
 });
 
@@ -205,7 +204,7 @@ function updateGlobalBufferAndViews(buf) {
  Module["HEAPF64"] = HEAPF64 = new Float64Array(buf);
 }
 
-var DYNAMIC_BASE = 5248800, DYNAMICTOP_PTR = 5744;
+var DYNAMIC_BASE = 5248608, DYNAMICTOP_PTR = 5712;
 
 var INITIAL_INITIAL_MEMORY = Module["INITIAL_MEMORY"] || 16777216;
 
@@ -227,26 +226,6 @@ INITIAL_INITIAL_MEMORY = buffer.byteLength;
 updateGlobalBufferAndViews(buffer);
 
 HEAP32[DYNAMICTOP_PTR >> 2] = DYNAMIC_BASE;
-
-function callRuntimeCallbacks(callbacks) {
- while (callbacks.length > 0) {
-  var callback = callbacks.shift();
-  if (typeof callback == "function") {
-   callback(Module);
-   continue;
-  }
-  var func = callback.func;
-  if (typeof func === "number") {
-   if (callback.arg === undefined) {
-    Module["dynCall_v"](func);
-   } else {
-    Module["dynCall_vi"](func, callback.arg);
-   }
-  } else {
-   func(callback.arg === undefined ? null : callback.arg);
-  }
- }
-}
 
 var __ATPRERUN__ = [];
 
@@ -422,6 +401,26 @@ __ATINIT__.push({
  }
 });
 
+function callRuntimeCallbacks(callbacks) {
+ while (callbacks.length > 0) {
+  var callback = callbacks.shift();
+  if (typeof callback == "function") {
+   callback(Module);
+   continue;
+  }
+  var func = callback.func;
+  if (typeof func === "number") {
+   if (callback.arg === undefined) {
+    wasmTable.get(func)();
+   } else {
+    wasmTable.get(func)(callback.arg);
+   }
+  } else {
+   func(callback.arg === undefined ? null : callback.arg);
+  }
+ }
+}
+
 function ___assert_fail(condition, filename, line, func) {
  abort("Assertion failed: " + UTF8ToString(condition) + ", at: " + [ filename ? UTF8ToString(filename) : "unknown filename", line, func ? UTF8ToString(func) : "unknown function" ]);
 }
@@ -445,7 +444,6 @@ function emscripten_realloc_buffer(size) {
 function _emscripten_resize_heap(requestedSize) {
  requestedSize = requestedSize >>> 0;
  var oldSize = _emscripten_get_heap_size();
- var PAGE_MULTIPLE = 65536;
  var maxHeapSize = 2147483648;
  if (requestedSize > maxHeapSize) {
   return false;
@@ -454,7 +452,7 @@ function _emscripten_resize_heap(requestedSize) {
  for (var cutDown = 1; cutDown <= 4; cutDown *= 2) {
   var overGrownHeapSize = oldSize * (1 + .2 / cutDown);
   overGrownHeapSize = Math.min(overGrownHeapSize, requestedSize + 100663296);
-  var newSize = Math.min(maxHeapSize, alignUp(Math.max(minHeapSize, requestedSize, overGrownHeapSize), PAGE_MULTIPLE));
+  var newSize = Math.min(maxHeapSize, alignUp(Math.max(minHeapSize, requestedSize, overGrownHeapSize), 65536));
   var replacement = emscripten_realloc_buffer(newSize);
   if (replacement) {
    return true;
@@ -514,6 +512,8 @@ var PATH = {
  },
  basename: function(path) {
   if (path === "/") return "/";
+  path = PATH.normalize(path);
+  path = path.replace(/\/$/, "");
   var lastSlash = path.lastIndexOf("/");
   if (lastSlash === -1) return path;
   return path.substr(lastSlash + 1);

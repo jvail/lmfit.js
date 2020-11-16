@@ -33,11 +33,11 @@ lmfit: dir lmfit-patch
 	emmake make -j4;
 
 lmfit-patch:
-	sed -i \
-	-e 's|add_test($${app} $${CMAKE_CURRENT_BINARY_DIR}/$${app})|add_test($${app} $${CMAKE_CROSSCOMPILING_EMULATOR} $${CMAKE_CURRENT_BINARY_DIR}/$${app})|g' \
-	-e 's|add_test(curve1   $${CMAKE_CURRENT_BINARY_DIR}/../demo/curve1)|add_test(curve1 $${CMAKE_CROSSCOMPILING_EMULATOR} $${CMAKE_CURRENT_BINARY_DIR}/../demo/curve1)|g' \
-	-e 's|add_test(surface1 $${CMAKE_CURRENT_BINARY_DIR}/../demo/surface1)|add_test(surface1 $${CMAKE_CROSSCOMPILING_EMULATOR} $${CMAKE_CURRENT_BINARY_DIR}/../demo/surface1)|g' \
-	$(LMFIT_SRC)/test/CMakeLists.txt;
+	sed -i -e 's|$${CMAKE_CROSSCOMPILING_EMULATOR} COMMAND|COMMAND $${CMAKE_CROSSCOMPILING_EMULATOR}|g' $(LMFIT_SRC)/test/CMakeLists.txt;
 
 lmfit-test: lmfit
+	cp -fr $(LMFIT_SRC)/build/bin/* $(LMFIT_SRC)/build/test;
 	cd $(LMFIT_SRC)/build && ctest;
+
+clean:
+	rm -fr $(LMFIT_SRC)/build
