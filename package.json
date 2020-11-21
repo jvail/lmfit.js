@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/jvail/lmfit.js#readme",
   "devDependencies": {
-    "node": "^14.8.0"
+    "node": "^14.8.0",
+    "rollup": "^2.33.3"
   }
 }

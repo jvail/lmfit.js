@@ -29,9 +29,16 @@ int do_fit(int n, double *par, int m, const double *t, const double *y, double(*
         for ( i = 0; i < m; ++i)
             printf( "  t[%2d]=%4g y=%6g fit=%10g residue=%12g\n",
                     i, t[i], y[i], f(t[i],par), y[i] - f(t[i],par) );
+
+        if (status.outcome <= 3) {
+            printf("SUCCESS\n");
+        } else {
+            printf("FAILURE\n");
+        }
     }
 
-    return 0;
+    return status.outcome <= 3 ? 1 : 0;
+
 }
 
 #ifdef __cplusplus
