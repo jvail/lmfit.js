@@ -19,6 +19,7 @@ EMX_FLAGS += -s DISABLE_EXCEPTION_CATCHING=0
 # EMX_FLAGS += -s ENVIRONMENT='web'
 EMX_FLAGS += --memory-init-file 0
 EMX_FLAGS += --minify 0
+EMX_FLAGS += -s ASSERTIONS=1
 
 
 all: lmfit.js
@@ -29,7 +30,9 @@ dir:
 
 lmfit.js: lmfit
 	emcc $(EMX_FLAGS) -I$(LMFIT_SRC)/lib $(LMFIT_SRC)/build/lib/liblmfit.a src/lmfit.js.c \
-	-s EXPORTED_FUNCTIONS="[_do_fit]" -o $(BUILD_DIR)/lmfit.js;
+	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
+	-s EXPORTED_FUNCTIONS="[_do_fit]" \
+	-o $(BUILD_DIR)/lmfit.js;
 
 lmfit: dir lmfit-patch
 	cd $(LMFIT_SRC)/build; \

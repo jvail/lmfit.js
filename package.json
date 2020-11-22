@@ -1,12 +1,13 @@
 {
   "name": "lmfit.js",
-  "version": "1.0.0",
-  "description": "Curve fitting library",
+  "version": "3.0.0",
+  "description": "WebAssembly build of A C library for Levenberg-Marquardt minimization and least-squares fitting",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "dist": "npm run all && rollup -c rollup.config.js",
     "all": "make clean && npm run cc && npm run cc-test && npm run js",
     "cc": "make lmfit",
     "js": "make lmfit.js",
@@ -27,7 +28,10 @@
   },
   "homepage": "https://github.com/jvail/lmfit.js#readme",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^10.0.0",
     "node": "^14.8.0",
-    "rollup": "^2.33.3"
+    "rollup": "^2.33.3",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
