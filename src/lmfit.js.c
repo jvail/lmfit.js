@@ -6,11 +6,18 @@
 extern "C" {
 #endif
 
-int do_fit(int n, double *par, int m, const double *t, const double *y, double(*f)(double, const double*), int verbose)
+int do_fit(int n, double *par, int m, const double *t, const double *y, double(*f)(double, const double*),
+    int verbose, double ftol, double xtol, double gtol, double epsilon, int stepbound, int patience)
 {
     lm_control_struct control = lm_control_double;
+    control.ftol = ftol;
+    control.xtol = xtol;
+    control.gtol = gtol;
+    control.epsilon = epsilon;
+    control.stepbound = stepbound;
+    control.patience = patience;
+
     lm_status_struct status;
-    control.verbosity = verbose;
 
     if (verbose) printf( "Fitting ...\n" );
     lmcurve( n, par, m, t, y, f, &control, &status );
