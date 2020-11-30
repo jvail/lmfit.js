@@ -9,12 +9,12 @@ const plugins = [
             { src: 'src/build/lmfit.wasm', dest: 'dist' }
         ]
     })
-]
+];
 
 export default args => ({
     input: 'src/lm.node.js',
     output: [
         { dir: 'dist', format: 'cjs', preferConst: true, exports: 'auto' }
     ],
-    plugins: args.configDebug ? plugins : [...plugins]
+    plugins: args.configDebug ? plugins : [...plugins, terser()]
 });

@@ -1,3 +1,6 @@
-import lm from './lmfit';
+import lmfit from './build/lmfit';
+import lm from './lm';
 
-export default lm;
+const lm_ = lmfit().then(lmfit => lm(lmfit));
+
+export default lm_;

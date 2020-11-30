@@ -1,6 +1,4 @@
-import lmfit from './build/lmfit';
-
-const lm = lmfit().then(lmfit => {
+const lm = (lmfit) => {
 
     const {
         HEAPU8,
@@ -107,7 +105,6 @@ const lm = lmfit().then(lmfit => {
         fit
     }
 
-
-});
+};
 
 export default lm;
