@@ -1,5 +1,5 @@
-import lmfit from './build/lmfit.web';
-import LM from './lm';
+import lmfit from './build/lmfit.web.js';
+import LM from './lm.js';
 let lm = null;
 
 self.onmessage = function (evt) {
