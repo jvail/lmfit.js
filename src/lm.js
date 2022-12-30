@@ -1,7 +1,7 @@
 const lm = (lmfit) => {
 
     const {
-        HEAPU8,
+        HEAPF64,
         getValue,
         addFunction,
         _free,
@@ -13,17 +13,20 @@ const lm = (lmfit) => {
         'number', 'number', 'number', 'number', 'number', 'number'
     ]);
 
-    function addModel(model, n, nan) {
+    function addModel(model, n, x, nanVal) {
 
-        const fn = function (t, ptr) {
-            const p = [];
-            for (let i = 0; i < n; i++)
-                p[i] = getValue(ptr + i * 8, 'double');
-            const y = model(t, p);
-            return Number.isNaN(y) ? nan : y;
+        const fn = function (parPtr, m, nullPtr, fvecPtr, infoPtr) {
+            const {isNaN} = Number;
+            const p = new Float64Array(HEAPF64.buffer, parPtr, n);
+            const fvec = new Float64Array(HEAPF64.buffer, fvecPtr, m);
+            for (let i = 0; i < m; ++i) {
+                let y = model(x[i], p);
+                if (isNaN(y)) y = nanVal;
+                fvec[i] = y;
+            }
         };
 
-        return addFunction(fn, 'ddi');
+        return addFunction(fn, 'viiiii');
 
     }
 
@@ -57,22 +60,18 @@ const lm = (lmfit) => {
             patience
         } = options;
 
-        const fn_ptr = addModel(model, guess.length, nan || 9999);
+        const fn_ptr = addModel(model, guess.length, x, nan || 9999);
 
         const guess_ptr = _malloc(guess.length * 8);
-        const guess_data = new Uint8Array(HEAPU8.buffer, guess_ptr, guess.length * 8);
-        guess_data.set(new Uint8Array((new Float64Array(guess)).buffer));
-
-        const x_ptr = _malloc(x.length * 8);
-        const x_data = new Uint8Array(HEAPU8.buffer, x_ptr, x.length * 8);
-        x_data.set(new Uint8Array((new Float64Array(x)).buffer));
+        const guess_data = new Float64Array(HEAPF64.buffer, guess_ptr, guess.length);
+        guess_data.set(guess);
 
         const y_ptr = _malloc(y.length * 8);
-        const y_data = new Uint8Array(HEAPU8.buffer, y_ptr, y.length * 8);
-        y_data.set(new Uint8Array((new Float64Array(y)).buffer));
+        const y_data = new Float64Array(HEAPF64.buffer, y_ptr, y.length);
+        y_data.set(y);
 
         const status = !!do_fit(
-            guess.length, guess_ptr, x.length, x_ptr, y_ptr, fn_ptr,
+            guess.length, guess_ptr, x.length, y_ptr, fn_ptr,
             +!!verbose,
             ftol || 30 * Number.EPSILON,
             xtol || 30 * Number.EPSILON,
@@ -91,8 +90,22 @@ const lm = (lmfit) => {
 
         lmfit.removeFunction(fn_ptr);
         _free(guess_ptr);
-        _free(x_ptr);
         _free(y_ptr);
+
+        if (verbose) {
+            console.log("fitting data as follows:");
+            for (let i = 0; i < x.length; ++i)
+                console.log(
+                    "  t[%s]=%s y=%s fit=%s residue=%s",
+                    i.toString().padStart(2),
+                    x[i].toString().padStart(4),
+                    y[i].toString().padStart(6),
+                    model(x[i], params).toString().padStart(10),
+                    y[i] - model(x[i], params).toString().padStart(12)
+                );
+
+            console.log(status ? "SUCCESS" : "FAILURE");
+        }
 
         return {
             status,
@@ -103,7 +116,7 @@ const lm = (lmfit) => {
 
     return {
         fit
-    }
+    };
 
 };
 
