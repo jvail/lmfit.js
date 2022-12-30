@@ -10,6 +10,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * In Node.js, don't install Emscripten's default process.uncaughtException,
   unhandledRejection listeners.
+* Remove package-lock.json.
 ### Added
 ### Fixed
 * Fix building with current emscripten (3.1.28).
