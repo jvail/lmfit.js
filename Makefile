@@ -7,9 +7,8 @@ EMX_FLAGS :=
 EMX_FLAGS += -Os
 EMX_FLAGS += -s EXPORT_ES6=1
 EMX_FLAGS += -s MODULARIZE=1
-EMX_FLAGS += -s USE_ES6_IMPORT_META=0
+EMX_FLAGS += -s USE_ES6_IMPORT_META=1
 EMX_FLAGS += -s EXPORT_NAME='promise'
-EMX_FLAGS += -s WASM_ASYNC_COMPILATION=0
 EMX_FLAGS += -s ALLOW_MEMORY_GROWTH=1
 EMX_FLAGS += -s ALLOW_TABLE_GROWTH=1
 EMX_FLAGS += -s INITIAL_MEMORY=8MB
@@ -31,14 +30,14 @@ node: lmfit
 	emcc $(EMX_FLAGS) -I$(LMFIT_SRC)/lib $(LMFIT_SRC)/build/lib/liblmfit.a src/lmfit.js.c \
 	-s ENVIRONMENT="node" \
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
-	-s EXPORTED_FUNCTIONS="[_do_fit]" \
+	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
 	-o $(BUILD_DIR)/lmfit.js;
 
 web: lmfit
 	emcc $(EMX_FLAGS) -I$(LMFIT_SRC)/lib $(LMFIT_SRC)/build/lib/liblmfit.a src/lmfit.js.c \
 	-s ENVIRONMENT="worker" \
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
-	-s EXPORTED_FUNCTIONS="[_do_fit]" \
+	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
 	-o $(BUILD_DIR)/lmfit.web.js;
 
 lmfit: dir lmfit-patch
