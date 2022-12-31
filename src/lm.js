@@ -1,14 +1,16 @@
-const lm = (lmfit) => {
+function initLmFit(Module) {
 
     const {
         HEAPF64,
         getValue,
         addFunction,
+        removeFunction,
         _free,
-        _malloc
-    } = lmfit;
+        _malloc,
+        cwrap
+    } = Module;
 
-    const do_fit = lmfit.cwrap('do_fit', 'number', [
+    const do_fit = cwrap('do_fit', 'number', [
         'number', 'number', 'number', 'number', 'number', 'number',
         'number', 'number', 'number', 'number', 'number', 'number'
     ]);
@@ -88,7 +90,7 @@ const lm = (lmfit) => {
             }
         }
 
-        lmfit.removeFunction(fn_ptr);
+        removeFunction(fn_ptr);
         _free(guess_ptr);
         _free(y_ptr);
 
@@ -114,10 +116,8 @@ const lm = (lmfit) => {
 
     };
 
-    return {
-        fit
-    };
+    Module.fit = fit;
 
-};
+}
 
-export default lm;
+initLmFit(Module);

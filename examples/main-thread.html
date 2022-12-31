@@ -7,7 +7,9 @@
 
 <body>
     <script type="module">
-        import lm from '../dist/lm.js';
+        import lm from '/dist/lmfit.web.js';
+        // Asynchronously initialize the WebAssembly module:
+        const {fit} = await lm();
 
         function random(mean, stddev) {
             const u1 = Math.random();
@@ -31,12 +33,12 @@
             gtol: Number.EPSILON,
             epsilon: Number.EPSILON,
             patience: 1000,
-            verbose: true
+            verbose: false
         };
 
         const test_params = [5.5];
-        const model = 'p[0] * Math.sqrt(x)';
-        const { x, y } = makeData(new Function(['x', 'p'], 'return ' + model), test_params);
+        const model = (x, p) => p[0] * Math.sqrt(x);
+        const { x, y } = makeData(model, test_params);
 
         const data = {
             guess: [99],
@@ -44,13 +46,10 @@
             x, y
         };
 
-        const worker = lm();
-        worker.onmessage = (ev) => {
-            console.log(ev.data)
-            if (ev.data.initialized) {
-                worker.postMessage({ data, options })
-            }
-        };
+        console.time("fit");
+        const r = fit(data, options);
+        console.timeEnd("fit");
+        console.log(r);
 
     </script>
 </body>
