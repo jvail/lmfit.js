@@ -8,6 +8,17 @@ project adheres to [Semantic Versioning](http://semver.org/).
 (Unreleased)
 ==================
 ### Changed
+* ⚠️ Breaking: The Web browser version now runs in the main thread instead of a
+  Web Worker. This change was made because it's not possible to securely
+  transfer a Function from the main thread to a Worker; i.e., sites using a
+  Content Security Policy would have had to enable `unsafe-eval`.
+
+  An example has been added showing how to use this module from a Web Worker
+  instead.
+* ⚠️ Breaking: The Node.js version is now ESM-only; there is no CJS version.
+* Don't inline-compress the Web browser version, and remove the pako dependency.
+  This saves ~2900 bytes when the HTTP response itself is compressed, and
+  reduces startup delay.
 * In Node.js, don't install Emscripten's default process.uncaughtException,
   unhandledRejection listeners.
 * Remove package-lock.json.

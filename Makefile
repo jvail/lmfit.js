@@ -1,7 +1,7 @@
 PWD = $(shell pwd)
 
 LMFIT_SRC = $(PWD)/src/lmfit
-BUILD_DIR = $(PWD)/src/build
+DIST_DIR = $(PWD)/dist
 
 EMX_FLAGS :=
 EMX_FLAGS += -Os
@@ -26,21 +26,24 @@ all: lmfit.js
 
 dir:
 	mkdir -p $(LMFIT_SRC)/build;
-	mkdir -p $(PWD)/src/build;
+	mkdir -p $(DIST_DIR);
 
 node: lmfit
 	emcc $(EMX_FLAGS) -I$(LMFIT_SRC)/lib $(LMFIT_SRC)/build/lib/liblmfit.a src/lmfit.js.c \
 	-s ENVIRONMENT="node" \
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
 	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
-	-o $(BUILD_DIR)/lmfit.js;
+	--post-js $(PWD)/src/lm.js \
+	-o $(DIST_DIR)/lmfit.mjs;
 
 web: lmfit
 	emcc $(EMX_FLAGS) -I$(LMFIT_SRC)/lib $(LMFIT_SRC)/build/lib/liblmfit.a src/lmfit.js.c \
-	-s ENVIRONMENT="worker" \
+	-s ENVIRONMENT="web" \
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
 	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
-	-o $(BUILD_DIR)/lmfit.web.js;
+	-s SINGLE_FILE=1 \
+	--post-js $(PWD)/src/lm.js \
+	-o $(DIST_DIR)/lmfit.web.js;
 
 lmfit: dir lmfit-patch
 	cd $(LMFIT_SRC)/build; \
@@ -56,4 +59,4 @@ lmfit-test: lmfit
 
 clean:
 	rm -fr $(LMFIT_SRC)/build;
-	rm -fr $(BUILD_DIR);
+	rm -fr $(DIST_DIR);
