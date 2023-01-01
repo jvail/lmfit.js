@@ -25,6 +25,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 * Improve performance by reducing the number of calls between JS and WASM. For
   example, this provides a ~2.5x speedup for a dataset with 20,000 points.
 * Add file extensions to import statements so modules are standard ES modules.
+* Shrink the size of the generated code by setting various compiler options.
 ### Added
 ### Fixed
 * Fix building with current emscripten (3.1.28).
