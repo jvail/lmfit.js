@@ -19,7 +19,9 @@ EMX_FLAGS += --memory-init-file 0
 EMX_FLAGS += --minify 0
 EMX_FLAGS += -s TEXTDECODER=2
 EMX_FLAGS += -s MALLOC=emmalloc
-
+EMX_FLAGS += -s MIN_SAFARI_VERSION=130100
+EMX_FLAGS += -s STRICT_JS=1
+EMX_FLAGS += --no-entry
 
 all: lmfit.js
 
