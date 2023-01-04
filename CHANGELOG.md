@@ -16,6 +16,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
   An example has been added showing how to use this module from a Web Worker
   instead.
 * ⚠️ Breaking: The Node.js version is now ESM-only; there is no CJS version.
+* ⚠️ Breaking: The property `status` in the returned object was renamed to
+  `converged`, and `status` is now a string describing why the function stopped.
 * Don't inline-compress the Web browser version, and remove the pako dependency.
   This saves ~2900 bytes when the HTTP response itself is compressed, and
   reduces startup delay.
@@ -28,6 +30,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
 * Shrink the size of the generated code by setting various compiler options.
 * Improve error messages when checking arguments.
 ### Added
+* The return value now includes the norm of the residuals and a string
+  describing why the function stopped.
 ### Fixed
 * Fix building with current emscripten (3.1.28).
 * The `patience` parameter was ignored.
