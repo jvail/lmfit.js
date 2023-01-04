@@ -32,6 +32,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 * The return value now includes the norm of the residuals and a string
   describing why the function stopped.
+* Typescript definitions.
 ### Fixed
 * Fix building with current emscripten (3.1.28).
 * The `patience` parameter was ignored.

@@ -52,12 +52,7 @@ function initLmFit(Module) {
 
     const fit = function (data, options={}) {
 
-        const {
-            model,      /* model function */
-            guess,      /* initial param guess */
-            x,          /* x-axis values */
-            y           /* y-axis values */
-        } = data;
+        const {model, guess, x, y} = data;
 
         if (typeof model !== 'function' || model.length !== 2)
             throw new Error('model must be a function accepting 2 parameters.');
@@ -70,16 +65,7 @@ function initLmFit(Module) {
         if (x.length !== y.length)
             throw new Error('x and y must have the same length.');
 
-        const {
-            verbose,    /* print to console while fitting */
-            nan,        /* value returned if model evaluates to NaN */
-            ftol,       /* see lmstruct.h */
-            xtol,
-            gtol,
-            epsilon,
-            stepbound,
-            patience
-        } = options;
+        const {verbose, nan, ftol, xtol, gtol, epsilon, stepbound, patience} = options;
 
         const fn_ptr = addModel(model, guess.length, x, nan || 9999);
 

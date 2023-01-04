@@ -19,6 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/jvail/lmfit.js.git"
   },
+  "types": "index.d.ts",
   "keywords": [
     "least-squares minimization",
     "curve fitting"
