@@ -41,15 +41,16 @@ function initLmFit(Module) {
             y           /* y-axis values */
         } = data;
 
-        if (
-            (!model || typeof model !== 'function') ||
-            (!guess || !Array.isArray(guess)) ||
-            (!x || !Array.isArray(x)) ||
-            (!y || !Array.isArray(y)) ||
-            (x.length !== y.length)
-        ) {
-            throw new Error('A required property is missing or malformed');
-        }
+        if (typeof model !== 'function' || model.length !== 2)
+            throw new Error('model must be a function accepting 2 parameters.');
+        if (!Array.isArray(guess))
+            throw new Error('guess must be an array.');
+        if (!Array.isArray(x))
+            throw new Error('x must be an array.');
+        if (!Array.isArray(y))
+            throw new Error('y must be an array.');
+        if (x.length !== y.length)
+            throw new Error('x and y must have the same length.');
 
         const {
             verbose,    /* print to console while fitting */
