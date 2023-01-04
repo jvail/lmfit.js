@@ -51,6 +51,7 @@ lmfit: dir lmfit-patch
 	emcmake cmake -DCMAKE_CROSSCOMPILING_EMULATOR='node' ..; \
 	emmake make -j4;
 
+# https://jugit.fz-juelich.de/mlz/lmfit/-/issues/1#note_46503
 lmfit-patch:
 	sed -i -e 's|$${CMAKE_CROSSCOMPILING_EMULATOR} COMMAND|COMMAND $${CMAKE_CROSSCOMPILING_EMULATOR}|g' $(LMFIT_SRC)/test/CMakeLists.txt;
 

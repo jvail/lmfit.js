@@ -29,6 +29,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 * Add file extensions to import statements so modules are standard ES modules.
 * Shrink the size of the generated code by setting various compiler options.
 * Improve error messages when checking arguments.
+* Update lmfit library (https://jugit.fz-juelich.de/mlz/lmfit/-/compare/497505787dcc9a2fa8420dd8f3f9b76c2dc8bab7...fce0bc2ebc9ba570046a7ed3fd2618fe7147e04a)
 ### Added
 * The return value now includes the norm of the residuals and a string
   describing why the function stopped.
