@@ -30,7 +30,12 @@ const options = {
 };
 
 const ret = lm.fit(data, options);
-// { status: true, params: [ /* the optimized parameters */ ] }
+// {
+//    converged: true,
+//    params: [ /* the optimized parameters */ ],
+//    fnorm: 1.234,
+//    status: 'converged (the relative error of the parameter vector is at most tol)'
+// }
 ```
 
 See src/lm.js and https://jugit.fz-juelich.de/mlz/lmfit/-/blob/master/lib/lmstruct.h for info on the supported `options`.

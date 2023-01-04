@@ -6,9 +6,15 @@
 extern "C" {
 #endif
 
-int do_fit(int n_par, double *par, int m, const double *y,
+typedef struct {
+    double fnorm;
+    int outcome;
+} output;
+
+void do_fit(int n_par, double *par, int m, const double *y,
     void(*f)(const double *const, const int, const void *const, double *const, int *const),
-    int verbose, double ftol, double xtol, double gtol, double epsilon, int stepbound, int patience)
+    int verbose, double ftol, double xtol, double gtol, double epsilon, int stepbound, int patience,
+    output* o_status)
 {
     lm_control_struct control = lm_control_double;
     control.ftol = ftol;
@@ -33,8 +39,8 @@ int do_fit(int n_par, double *par, int m, const double *y,
         printf("obtained norm:\n  %12g\n", status.fnorm );
     }
 
-    return status.outcome <= 3 ? 1 : 0;
-
+    o_status->fnorm = status.fnorm;
+    o_status->outcome = status.outcome;
 }
 
 #ifdef __cplusplus

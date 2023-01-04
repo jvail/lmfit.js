@@ -1,5 +1,22 @@
 function initLmFit(Module) {
 
+    const statuses = [
+        "found zero (sum of squares below underflow limit)",
+        "converged (the relative error in the sum of squares is at most tol)",
+        "converged (the relative error of the parameter vector is at most tol)",
+        "converged (both errors are at most tol)",
+        "trapped (by degeneracy; increasing epsilon might help)",
+        "exhausted (number of function calls exceeding preset patience)",
+        "failed (ftol<tol: cannot reduce sum of squares any further)",
+        "failed (xtol<tol: cannot improve approximate solution any further)",
+        "failed (gtol<tol: cannot improve approximate solution any further)",
+        "crashed (not enough memory)",
+        "exploded (fatal coding error: improper input parameters)",
+        "stopped (break requested within function evaluation)",
+        "found nan (function value is not-a-number or infinite)",
+        "won't fit (no free parameter)"
+    ];
+
     const {
         HEAPF64,
         getValue,
@@ -10,9 +27,10 @@ function initLmFit(Module) {
         cwrap
     } = Module;
 
-    const do_fit = cwrap('do_fit', 'number', [
+    const do_fit = cwrap('do_fit', 'void', [
         'number', 'number', 'number', 'number', 'number', 'number',
-        'number', 'number', 'number', 'number', 'number', 'number'
+        'number', 'number', 'number', 'number', 'number', 'number',
+        'number'
     ]);
 
     function addModel(model, n, x, nanVal) {
@@ -73,7 +91,9 @@ function initLmFit(Module) {
         const y_data = new Float64Array(HEAPF64.buffer, y_ptr, y.length);
         y_data.set(y);
 
-        const status = !!do_fit(
+        const status_ptr = _malloc(8 + 4); // sizeof(output)
+
+        do_fit(
             guess.length, guess_ptr, x.length, y_ptr, fn_ptr,
             +!!verbose,
             ftol || 30 * Number.EPSILON,
@@ -81,11 +101,16 @@ function initLmFit(Module) {
             gtol || 30 * Number.EPSILON,
             epsilon || 30 * Number.EPSILON,
             stepbound || 100,
-            patience || 100
+            patience || 100,
+            status_ptr
         );
 
+        const fnorm = getValue(status_ptr, 'double')
+        const outcome = getValue(status_ptr + 8, 'i32');
+        const converged = outcome <= 3;
+
         const params = [];
-        if (status) {
+        if (converged) {
             for (let i = 0; i < guess.length; i++) {
                 params[i] = getValue(guess_ptr + i * 8, 'double');
             }
@@ -94,6 +119,7 @@ function initLmFit(Module) {
         removeFunction(fn_ptr);
         _free(guess_ptr);
         _free(y_ptr);
+        _free(status_ptr);
 
         if (verbose) {
             console.log("fitting data as follows:");
@@ -107,12 +133,14 @@ function initLmFit(Module) {
                     y[i] - model(x[i], params).toString().padStart(12)
                 );
 
-            console.log(status ? "SUCCESS" : "FAILURE");
+            console.log(converged ? "SUCCESS" : "FAILURE");
         }
 
         return {
-            status,
-            params
+            converged,
+            params,
+            fnorm,
+            status: statuses[outcome]
         };
 
     };
