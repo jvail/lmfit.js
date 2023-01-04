@@ -26,6 +26,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   example, this provides a ~2.5x speedup for a dataset with 20,000 points.
 * Add file extensions to import statements so modules are standard ES modules.
 * Shrink the size of the generated code by setting various compiler options.
+* Improve error messages when checking arguments.
 ### Added
 ### Fixed
 * Fix building with current emscripten (3.1.28).
