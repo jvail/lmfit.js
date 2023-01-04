@@ -38,7 +38,7 @@ const ret = lm.fit(data, options);
 // }
 ```
 
-See src/lm.js and https://jugit.fz-juelich.de/mlz/lmfit/-/blob/master/lib/lmstruct.h for info on the supported `options`.
+See index.d.ts for info on the supported `options`.
 
 ## Examples
 
