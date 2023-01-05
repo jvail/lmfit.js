@@ -96,10 +96,8 @@ function initLmFit(Module) {
         const converged = outcome <= 3;
 
         const params = [];
-        if (converged) {
-            for (let i = 0; i < guess.length; i++) {
-                params[i] = getValue(guess_ptr + i * 8, 'double');
-            }
+        for (let i = 0; i < guess.length; i++) {
+            params[i] = getValue(guess_ptr + i * 8, 'double');
         }
 
         removeFunction(fn_ptr);
