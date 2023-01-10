@@ -49,14 +49,11 @@ and open the browser console:
    in the main JS thread.
 
 2. http://localhost:50000/examples/webworker.html - This shows running lmfit in
-   a web Worker. Note:
-
-      * The Worker source (examples/webworker.js) must embed the objective
-        function; it's not possible to securely transfer it from the main thread
-        to the Worker.
-      * Worker communication has significant overhead. For this example, the
-        main thread version runs in ~1 ms, while the Worker version runs in ~50
-        ms.
+   a web Worker. It does not work in Firefox because [Firefox doesn't support
+   modules in Workers](https://bugzilla.mozilla.org/show_bug.cgi?id=1247687).
+      > Note: Worker communication has significant overhead. For this example,
+        the main thread version runs in ~1 ms, while the Worker version runs in
+        ~50 ms.
 
 ## Missing features
 

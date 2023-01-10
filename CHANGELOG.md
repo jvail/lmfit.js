@@ -9,12 +9,10 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ==================
 ### Changed
 * ⚠️ Breaking: The Web browser version now runs in the main thread instead of a
-  Web Worker. This change was made because it's not possible to securely
-  transfer a Function from the main thread to a Worker; i.e., sites using a
-  Content Security Policy would have had to enable `unsafe-eval`.
-
-  An example has been added showing how to use this module from a Web Worker
-  instead.
+  Web Worker. This change was made because it's more flexible: users can either
+  run in the main thread (which has no call overhead), or wrap the lmfit call in
+  a worker. It's also somewhat safer as it avoids `new Function()`. An example
+  has been added showing how to use this module from a Web Worker.
 * ⚠️ Breaking: The Node.js version is now ESM-only; there is no CJS version.
 * ⚠️ Breaking: The property `status` in the returned object was renamed to
   `converged`, and `status` is now a string describing why the function stopped.

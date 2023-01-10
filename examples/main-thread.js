@@ -1,3 +1,7 @@
+import lm from '/dist/lmfit.web.js';
+// Asynchronously initialize the WebAssembly module:
+const {fit} = await lm();
+
 function random(mean, stddev) {
     const u1 = Math.random();
     const u2 = Math.random();
@@ -29,20 +33,11 @@ const { x, y } = makeData(model, test_params);
 
 const data = {
     guess: [99],
-    x, y,
-    // To pass the model function to the worker, call toString() on it here.
-    // Otherwise, embed the function directly in the worker; see
-    // webworker-worker.js.
-    model: model.toString()
+    model,
+    x, y
 };
 
-const worker = new Worker('/examples/webworker-worker.js', { type: 'module' });
-worker.addEventListener("error", e => {
-    console.error("Worker error:", e);
-});
-worker.addEventListener("message", e => {
-    console.timeEnd("fit");
-    console.log("Worker result:", e.data);
-});
 console.time("fit");
-worker.postMessage({data, options});
+const r = fit(data, options);
+console.timeEnd("fit");
+console.log(r);
