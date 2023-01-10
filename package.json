@@ -2,16 +2,15 @@
   "name": "lmfit.js",
   "version": "3.0.0",
   "description": "WebAssembly build of a C library for Levenberg-Marquardt minimization and least-squares fitting",
-  "main": "dist/lm.node.js",
-  "browser": "dist/lm.js",
+  "main": "dist/lmfit.mjs",
+  "browser": "dist/lmfit.web.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "dist": "npm run all && npm run node && npm run web",
-    "node": "rollup -c rollup.config.node.js",
-    "web": "rollup -c rollup.config.webworker.js && node src/scripts/toBase64 && rollup -c rollup.config.web.js",
-    "all": "make clean && npm run cc && npm run cc-test && npm run js",
+    "dist": "npm run rebuild",
+    "build": "npm run cc && npm run cc-test && npm run js",
+    "rebuild": "make clean && npm run build",
     "cc": "make lmfit",
     "js": "make node web",
     "cc-test": "make lmfit-test"
@@ -20,25 +19,18 @@
     "type": "git",
     "url": "git+https://github.com/jvail/lmfit.js.git"
   },
+  "types": "index.d.ts",
   "keywords": [
     "least-squares minimization",
     "curve fitting"
   ],
   "author": "jvail",
+  "contributors": [
+    "zbjornson"
+  ],
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/jvail/lmfit.js/issues"
   },
-  "homepage": "https://github.com/jvail/lmfit.js#readme",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^16.0.0",
-    "@rollup/plugin-node-resolve": "^10.0.0",
-    "node": "^14.8.0",
-    "rollup": "^2.33.3",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-terser": "^7.0.2"
-  },
-  "dependencies": {
-    "pako": "^1.0.11"
-  }
+  "homepage": "https://github.com/jvail/lmfit.js#readme"
 }
