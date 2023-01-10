@@ -18,9 +18,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
 * ⚠️ Breaking: The Node.js version is now ESM-only; there is no CJS version.
 * ⚠️ Breaking: The property `status` in the returned object was renamed to
   `converged`, and `status` is now a string describing why the function stopped.
-* Don't inline-compress the Web browser version, and remove the pako dependency.
-  This saves ~2900 bytes when the HTTP response itself is compressed, and
-  reduces startup delay.
+* ⚠️ Breaking: The Web browser version is no longer a single-file bundle. This
+  saves a significant amount of code size and reduces startup delay.
 * In Node.js, don't install Emscripten's default process.uncaughtException,
   unhandledRejection listeners.
 * Remove package-lock.json.

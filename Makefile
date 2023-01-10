@@ -42,7 +42,6 @@ web: lmfit
 	-s ENVIRONMENT="web" \
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
 	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
-	-s SINGLE_FILE=1 \
 	--post-js $(PWD)/src/lm.js \
 	-o $(DIST_DIR)/lmfit.web.js;
 
