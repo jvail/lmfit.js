@@ -65,6 +65,8 @@ and open the browser console:
 
 ## Build & test (for developers of lmfit.js)
 
+lmfit.js is known to build with emsdk 3.1.28.
+
 ```
 source {path to emsdk}/emsdk_env.sh
 npm install
