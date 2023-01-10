@@ -25,6 +25,9 @@
     "curve fitting"
   ],
   "author": "jvail",
+  "contributors": [
+    "zbjornson"
+  ],
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/jvail/lmfit.js/issues"
