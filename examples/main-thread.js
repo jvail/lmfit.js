@@ -1,4 +1,4 @@
-import lm from '/dist/lmfit.web.js';
+import lm from '/dist/lmfit.js';
 // Asynchronously initialize the WebAssembly module:
 const {fit} = await lm();
 

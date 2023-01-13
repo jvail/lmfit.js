@@ -16,7 +16,6 @@ EMX_FLAGS += -s RESERVED_FUNCTION_POINTERS=16
 EMX_FLAGS += -s NODEJS_CATCH_EXIT=0
 EMX_FLAGS += -s NODEJS_CATCH_REJECTION=0
 EMX_FLAGS += --memory-init-file 0
-EMX_FLAGS += --minify 0
 EMX_FLAGS += -s TEXTDECODER=2
 EMX_FLAGS += -s MALLOC=emmalloc
 EMX_FLAGS += -s MIN_SAFARI_VERSION=130100
@@ -43,7 +42,7 @@ web: lmfit
 	-s EXPORTED_RUNTIME_METHODS="[addFunction, removeFunction, getValue, cwrap]" \
 	-s EXPORTED_FUNCTIONS="[_do_fit, _malloc, _free]" \
 	--post-js $(PWD)/src/lm.js \
-	-o $(DIST_DIR)/lmfit.web.js;
+	-o $(DIST_DIR)/lmfit.js;
 
 lmfit: dir lmfit-patch
 	cd $(LMFIT_SRC)/build; \
