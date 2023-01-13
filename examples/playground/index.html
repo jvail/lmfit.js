@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Playground</title>
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                text-align: center;
+            }
+            .container > * {
+                width: 50%;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <pre style="text-align:center; width: 100%; margin-top: 20px;">
+            Move slider to regenerate input data with growing noise.
+        </pre>
+        <div class="container">
+            <mwc-slider max="1" min="0" value="0.1" step="0.01"></mwc-slider>
+            <canvas id="chart"></canvas>
+            <pre id="result" style="margin-top: 20px; text-align: left;"></pre>
+        </div>
+        <script type="module">
+            import {Chart} from './index.js';
+            import lm from '../../dist/lmfit.js';
+
+            const {fit} = await lm();
+
+            function random(mean, stddev) {
+                const u1 = Math.random();
+                const u2 = Math.random();
+                const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+                return z0 * stddev + mean;
+            }
+
+            function makeData(model, params, stddev) {
+                const x = [], y = [];
+                for (let i = 0; i < 500; i++) {
+                    const x_ = -2 + i * 4 / 500;
+                    x.push(x_);
+                    y.push(model(x_, params) + model(x_, params) * random(0, stddev));
+                }
+                return { x, y };
+            }
+
+            const options = {
+                ftol: Number.EPSILON,
+                xtol: Number.EPSILON,
+                gtol: Number.EPSILON,
+                epsilon: Number.EPSILON,
+                patience: 1000,
+                verbose: false
+            };
+
+            const { exp, pow } = Math;
+            // https://en.wikipedia.org/wiki/Generalised_logistic_function
+            const test_params = [1, 3, 3, 0.5, 0.75]
+            const model = (t, p) => {
+                const [A, K, B, v, Q] = p;
+                return A + (K - A) / pow(1 + Q * exp(-B * t), 1 / v);
+            }
+
+            const resultEle = document.getElementById('result')
+
+            const chart = new Chart(document.getElementById('chart'), {
+                data: {
+                    labels: [],
+                    datasets: [{
+                        type: 'scatter',
+                        data: [],
+                        fill: false
+                    }, {
+                        type: 'line',
+                        data: [],
+                        fill: false
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 1
+                        },
+                        line: {
+                            borderWidth: 1
+                        }
+                    },
+                    animation: {
+                        duration: 0
+                    }
+                }
+            });
+
+            const updateChart = stddev => {
+                const { x, y } = makeData(model, test_params, stddev);
+                const { converged, params } = fit({
+                        guess: [2, 5, 1, 2, 1],
+                        model,
+                        x, y
+                    }, options
+                );
+                const fitted = makeData(model, params, 0);
+
+                chart.data.labels = x;
+                chart.data.datasets[0].data = y;
+                chart.data.datasets[1].data = fitted.y;
+                chart.update();
+                resultEle.innerText = `converged: ${converged} \nparams: ${params.map((p, i) => ' ' + p.toFixed(2) + ` (${test_params[i]})`)} \nmodel: ${model}`;
+            }
+
+            document
+                .querySelector('mwc-slider')
+                .addEventListener('input', evt => updateChart(evt.target.value));
+
+            updateChart(document.querySelector('mwc-slider').value);
+
+        </script>
+    </body>
+
+</html>
